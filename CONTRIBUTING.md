@@ -5,6 +5,11 @@ testar e propor mudanças sem perder tempo.
 
 ## Rodando o projeto
 
+> Só quer **usar** a ferramenta? O instalador resolve:
+> `curl -fsSL https://raw.githubusercontent.com/berodcdev/designsys/main/install.sh | bash`
+>
+> O que segue é para trabalhar no código.
+
 ```bash
 git clone https://github.com/berodcdev/designsys.git
 cd designsys

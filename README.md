@@ -56,13 +56,29 @@ Uma pasta por extração:
 
 ## Instalação
 
+Uma linha — confere o Python, instala o pipx se faltar, instala a ferramenta e baixa o
+Chromium:
+
 ```bash
-brew install pipx && pipx ensurepath    # se ainda não tiver pipx
+curl -fsSL https://raw.githubusercontent.com/berodcdev/designsys/main/install.sh | bash
+```
+
+Se preferir ler antes de executar (boa prática com qualquer `curl | bash`):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/berodcdev/designsys/main/install.sh -o install.sh
+less install.sh && bash install.sh
+```
+
+### Passo a passo, se preferir
+
+```bash
+brew install pipx && pipx ensurepath    # ou: apt install pipx
 pipx install git+https://github.com/berodcdev/designsys.git
 designsys doctor --fix                  # instala o Chromium do Playwright
 ```
 
-Para desenvolver, instale a partir do código com `--editable`:
+### Para desenvolver
 
 ```bash
 git clone https://github.com/berodcdev/designsys.git
@@ -70,7 +86,8 @@ pipx install --editable ./designsys
 designsys doctor --fix
 ```
 
-Python 3.11+. Testado em macOS e Linux.
+Python 3.11+. Testado em macOS e Linux. Rodar o instalador de novo **atualiza** a
+ferramenta para a versão mais recente do repositório.
 
 > Ainda não está no PyPI. Quando estiver, `pipx install designsys` basta.
 

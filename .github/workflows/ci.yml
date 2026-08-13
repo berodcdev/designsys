@@ -58,6 +58,25 @@ jobs:
       - name: Verificar o ambiente
         run: designsys doctor
 
+  instalador:
+    name: script de instalação
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Analisar o script
+        run: shellcheck install.sh
+
+      - name: Instalar como um usuário faria
+        # Usa o script de verdade, do jeito que o README manda.
+        run: bash install.sh
+
+      - name: A ferramenta ficou utilizável?
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          designsys --version
+          designsys doctor
+
   extracao:
     name: extração de ponta a ponta
     runs-on: ubuntu-latest
