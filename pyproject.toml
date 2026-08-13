@@ -1,0 +1,75 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "designsys"
+version = "0.2.0"
+description = "Extrai o design system completo de um site ao vivo — inclusive atrás de login — ou de um repositório local."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Bernardo", email = "dev@bernardorodc.com" }]
+maintainers = [{ name = "Bernardo", email = "dev@bernardorodc.com" }]
+keywords = [
+  "design-system",
+  "design-tokens",
+  "dtcg",
+  "css",
+  "tailwind",
+  "playwright",
+  "accessibility",
+  "a11y",
+  "figma",
+  "cli",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: Portuguese (Brazilian)",
+  "Operating System :: MacOS",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: User Interfaces",
+  "Topic :: Multimedia :: Graphics",
+  "Topic :: Utilities",
+]
+dependencies = [
+  "typer>=0.12",
+  "rich>=13.7",
+  "playwright>=1.44",
+  "requests>=2.31",
+  "tinycss2>=1.3",
+  "coloraide>=3.1",
+  "pathspec>=0.12",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+designsys = "designsys.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/berodcdev/designsys"
+Repository = "https://github.com/berodcdev/designsys"
+Issues = "https://github.com/berodcdev/designsys/issues"
+Changelog = "https://github.com/berodcdev/designsys/blob/main/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/designsys"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/designsys", "tests", "docs", "README.md", "LICENSE", "CHANGELOG.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = [
+  "browser: precisa do Chromium do Playwright (marcado automaticamente pelo conftest)",
+]

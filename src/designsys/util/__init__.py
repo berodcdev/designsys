@@ -1,0 +1,1 @@
+"""Subpacote do designsys."""

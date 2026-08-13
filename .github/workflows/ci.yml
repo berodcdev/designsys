@@ -1,0 +1,128 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rapidos:
+    name: testes sem navegador (${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+
+      - name: Instalar o pacote
+        run: pip install -e '.[dev]'
+
+      - name: Testes rápidos
+        # A suíte sem navegador cobre parsing, análise e geração de arquivos.
+        run: pytest -m "not browser" -q
+
+  navegador:
+    name: testes com Chromium
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar o pacote
+        run: pip install -e '.[dev]'
+
+      - name: Instalar o Chromium do Playwright
+        run: playwright install --with-deps chromium
+
+      - name: Suíte completa
+        # Os testes de navegador sobem um servidor HTTP local — nenhum depende
+        # de site de terceiro, então não quebram por mudança externa.
+        run: pytest -q
+
+      - name: Verificar o ambiente
+        run: designsys doctor
+
+  extracao:
+    name: extração de ponta a ponta
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar o pacote
+        run: pip install -e '.[dev]'
+
+      - name: Instalar o Chromium do Playwright
+        run: playwright install --with-deps chromium
+
+      - name: Montar um repositório de teste
+        run: |
+          mkdir -p /tmp/repo-teste/src
+          cat > /tmp/repo-teste/tailwind.config.js <<'EOF'
+          module.exports = {
+            theme: {
+              extend: {
+                colors: { brand: { 500: '#2b6cf6' }, danger: '#e5484d' },
+                spacing: { sm: '7px', lg: '29px' },
+                borderRadius: { card: '11px' },
+              },
+            },
+          }
+          EOF
+          cat > /tmp/repo-teste/src/app.css <<'EOF'
+          :root { --color-primary: #6a35d9; --space-gutter: 21px; }
+          .card { background: var(--color-primary); border-radius: 11px; padding: 21px; }
+          EOF
+
+      - name: Extrair do repositório
+        run: designsys repo /tmp/repo-teste --out /tmp/saida
+
+      - name: Conferir que os tokens plantados chegaram na saída
+        run: |
+          python - <<'EOF'
+          from pathlib import Path
+          saida = Path("/tmp/saida")
+          esperados = ["design-system.pdf", "tokens.json", "variables.css",
+                       "tailwind.config.js", "style-guide.html", "DESIGN-SYSTEM.md",
+                       "tokens.studio.json", "raw.json", "README.md"]
+          faltando = [n for n in esperados if not (saida / n).exists()]
+          assert not faltando, f"arquivos não gerados: {faltando}"
+
+          conteudo = (saida / "tokens.json").read_text() + (saida / "variables.css").read_text()
+          for token in ("#2b6cf6", "#e5484d", "#6a35d9", "7px", "29px", "11px", "21px"):
+              assert token in conteudo, f"token plantado ausente: {token}"
+
+          pdf = (saida / "design-system.pdf").read_bytes()
+          assert pdf[:5] == b"%PDF-" and len(pdf) > 8000, "PDF inválido"
+          print("saída completa e coerente")
+          EOF
+
+      - name: Diagnóstico
+        run: designsys audit /tmp/saida
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: extracao-exemplo
+          path: /tmp/saida
+          retention-days: 7

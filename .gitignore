@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.python-version
+
+# Testes e ferramentas
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Saídas da própria ferramenta (nunca versionar extrações)
+designsys-*/
+*.designsys/
+audit.md
+design-system.pdf
+tokens.studio.json
+.designsys-print.html
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

@@ -1,0 +1,38 @@
+name: Extração incorreta
+description: A ferramenta rodou, mas o resultado está errado
+labels: [extração]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use para casos do tipo "a cor primária detectada está errada", "não pegou
+        o tema escuro", "o framework foi identificado errado".
+
+  - type: input
+    id: alvo
+    attributes:
+      label: Site ou repositório
+      description: Se for público, a URL basta. Se for privado, descreva a estrutura.
+      placeholder: https://exemplo.com
+    validations:
+      required: true
+
+  - type: textarea
+    id: esperado
+    attributes:
+      label: O que a ferramenta disse, e o que era o correto
+      placeholder: |
+        Disse que a primária é #ff0000, mas o botão de CTA do site é #2b6cf6.
+    validations:
+      required: true
+
+  - type: textarea
+    id: raw
+    attributes:
+      label: Trecho do raw.json
+      description: |
+        A pasta gerada tem um `raw.json` com as frequências e a procedência de
+        cada valor — é o que permite reproduzir a decisão. Cole o trecho relevante
+        (ex.: `frequencies.button_backgrounds`). **Não anexe o arquivo inteiro se
+        vier de um sistema autenticado.**
+      render: json

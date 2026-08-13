@@ -1,0 +1,63 @@
+name: Problema
+description: Algo não funciona como devia
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por reportar. Quanto mais concreto, mais rápido de resolver.
+
+  - type: textarea
+    id: descricao
+    attributes:
+      label: O que aconteceu
+      description: E o que você esperava que acontecesse.
+    validations:
+      required: true
+
+  - type: input
+    id: comando
+    attributes:
+      label: Comando que você rodou
+      placeholder: designsys url exemplo.com --pages 3
+    validations:
+      required: true
+
+  - type: textarea
+    id: saida
+    attributes:
+      label: Saída do terminal
+      description: Rode de novo com `--verbose` e cole aqui. Apague o que for sensível.
+      render: shell
+
+  - type: input
+    id: versao
+    attributes:
+      label: Versão
+      description: "Resultado de `designsys --version`"
+      placeholder: designsys 0.2.0
+    validations:
+      required: true
+
+  - type: input
+    id: sistema
+    attributes:
+      label: Sistema e Python
+      placeholder: macOS 15.3 · Python 3.12.4
+    validations:
+      required: true
+
+  - type: textarea
+    id: doctor
+    attributes:
+      label: designsys doctor
+      description: Cole a saída, se o problema tiver a ver com navegador ou dependências.
+      render: shell
+
+  - type: checkboxes
+    id: cuidado
+    attributes:
+      label: Antes de enviar
+      options:
+        - label: Não estou colando senha, cookie nem conteúdo interno de sistema autenticado
+          required: true

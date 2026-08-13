@@ -1,0 +1,22 @@
+name: Ideia ou melhoria
+description: Uma sugestão para a ferramenta
+labels: [melhoria]
+body:
+  - type: textarea
+    id: problema
+    attributes:
+      label: Que problema isso resolve
+      description: Comece pelo problema, não pela solução.
+    validations:
+      required: true
+
+  - type: textarea
+    id: ideia
+    attributes:
+      label: Como você imagina
+      description: Se tiver uma proposta de como seria o comando ou a saída, descreva.
+
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: O que você faz hoje sem isso
