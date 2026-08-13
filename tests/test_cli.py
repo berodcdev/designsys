@@ -95,9 +95,29 @@ class TestBannerDoMenu:
         assert "Exemplos" in result.stdout or "exemplo" in result.stdout.lower()
 
     def test_url_documenta_opcoes_principais(self):
-        out = runner.invoke(app, ["url", "--help"]).stdout
-        for flag in ("--login", "--pages", "--path", "--out", "--no-assets", "--headed"):
-            assert flag in out
+        """As opções existem no comando.
+
+        Verificado por introspecção do Click, não pelo texto renderizado: o
+        painel do Rich muda de forma conforme a largura e o ambiente, e um teste
+        que depende disso passa na sua máquina e falha no CI.
+        """
+        from typer.main import get_command
+
+        comando = get_command(app).commands["url"]
+        declaradas = {opcao for parametro in comando.params for opcao in parametro.opts}
+        esperadas = {
+            "--login", "--user", "--pass", "--pages", "--path", "--out",
+            "--no-assets", "--no-pdf", "--no-dark", "--no-viewports",
+            "--exhaustive", "--headed", "--verbose", "--timeout",
+        }
+        assert esperadas <= declaradas, f"faltando: {esperadas - declaradas}"
+
+    def test_url_help_renderiza(self):
+        """O help sai inteiro, com uso e exemplos."""
+        resultado = runner.invoke(app, ["url", "--help"])
+        assert resultado.exit_code == 0
+        assert "Usage" in resultado.stdout or "designsys url" in resultado.stdout
+        assert "Exemplos" in resultado.stdout
 
     def test_versao(self):
         result = runner.invoke(app, ["--version"])
