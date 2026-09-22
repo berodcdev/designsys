@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "designsys"
-version = "0.3.0"
+version = "0.3.1"
 description = "Extrai o design system completo de um site ao vivo — inclusive atrás de login — ou de um repositório local."
 readme = "README.md"
 requires-python = ">=3.11"

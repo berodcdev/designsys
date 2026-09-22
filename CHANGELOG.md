@@ -3,7 +3,9 @@
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 Versionamento em [SemVer](https://semver.org/lang/pt-BR/).
 
-## [Não lançado]
+## [0.3.1] — 2026-09-21
+
+Só metadados: o pacote é idêntico ao 0.3.0.
 
 ### Mudado
 
