@@ -28,7 +28,7 @@ jobs:
           - os: macos-latest
             python: "3.13"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v5
         with:
@@ -46,7 +46,7 @@ jobs:
     name: testes com Chromium
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v5
         with:
@@ -71,7 +71,7 @@ jobs:
     name: script de instalação
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Analisar o script
         run: shellcheck install.sh
@@ -90,7 +90,7 @@ jobs:
     name: extração de ponta a ponta
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v5
         with:
