@@ -3,6 +3,15 @@
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 Versionamento em [SemVer](https://semver.org/lang/pt-BR/).
 
+## [Não lançado]
+
+### Mudado
+
+- A licença passou a ser declarada como expressão SPDX (`license = "MIT"` com
+  `license-files`), o formato da PEP 639, em vez do caminho do arquivo. Sem isso o
+  PyPI mostra o texto inteiro da MIT no lugar da sigla. O classifier de licença saiu
+  junto: os dois não podem coexistir.
+
 ## [0.3.0] — 2026-09-21
 
 Primeira versão publicada no [PyPI](https://pypi.org/project/designsys/):
