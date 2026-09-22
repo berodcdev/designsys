@@ -95,10 +95,18 @@ Apague o perfil e refaça: `rm -rf ~/.designsys/profiles/<domínio>`.
 **O site bloqueia automação** — `--headed` costuma resolver, porque muitas proteções
 avaliam sinais que só aparecem em modo headless.
 
+**"certificado TLS inválido"** — o ambiente usa certificado próprio ou autoassinado,
+comum em homologação interna. `--insecure` faz o navegador aceitar assim mesmo. Só use
+em rede de confiança: a flag vale para a execução inteira, inclusive para o momento em
+que a senha é enviada.
+
 ## Segurança
 
 **Senha, código OTP e o conteúdo do magic link nunca vão para disco.** Existem só em
 memória, durante a execução.
+
+**O certificado é validado.** Ligar `--insecure` desfaz isso para toda a execução —
+inclusive para o envio da senha. Veja [`SECURITY.md`](../SECURITY.md).
 
 **Os cookies vão.** É o que permite não repetir o login — e significa que
 `~/.designsys/profiles/` guarda material tão sensível quanto a senha enquanto a sessão

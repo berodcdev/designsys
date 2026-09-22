@@ -3,6 +3,32 @@
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 Versionamento em [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.3.0] — 2026-09-21
+
+Primeira versão publicada no [PyPI](https://pypi.org/project/designsys/):
+`pipx install designsys`.
+
+### Mudado
+
+**O certificado TLS voltou a ser validado.** O Chromium subia com
+`ignore_https_errors` ligado, o que aceitava qualquer certificado — inclusive na
+execução em que a senha é enviada, com `--login`. Agora a validação é o padrão, e
+quem precisa extrair de um ambiente com certificado próprio passa `--insecure`
+explicitamente. O erro de certificado já sugere a flag.
+
+### Adicionado
+
+- `--insecure` no comando `url`, para ambientes internos com certificado próprio
+  ou autoassinado. Imprime um aviso sempre que é usada.
+- Demonstração animada no README, gerada por `docs/demo.tape` (VHS) e
+  `docs/gerar-demo.sh` — a extração do GIF roda de verdade contra a rede.
+- `.github/dependabot.yml`: atualizações semanais das dependências e das actions.
+- O CI passou a rodar os testes rápidos também em macOS.
+- `tests/test_tls.py`: o padrão seguro agora é coberto por teste.
+- Publicação no PyPI por tag, via Trusted Publishing — sem token de API guardado
+  no repositório. O `install.sh` passou a instalar a versão publicada, caindo para
+  o repositório só se ela ainda não estiver no índice.
+
 ## [0.2.0] — 2026-08-13
 
 Esta versão para de tirar um retrato só e passa a opinar sobre o que encontrou.

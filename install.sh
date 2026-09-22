@@ -80,18 +80,28 @@ instalar_pipx() {
 }
 
 # ------------------------------------------------------------- designsys
+# Preferimos o PyPI: é uma versão publicada, não o topo de main. O repositório
+# fica como reserva, para o caso de a versão ainda não estar no índice.
 instalar_designsys() {
+  local acao="instalando" flags=""
   if pipx list --short 2>/dev/null | grep -q '^designsys '; then
-    passo "designsys já instalado — atualizando"
-    pipx install --force "git+$REPO" >/dev/null 2>&1 \
-      || erro "falhou ao atualizar. Rode sem o script: pipx install --force git+$REPO"
-    ok "designsys atualizado"
-  else
-    passo "instalando o designsys a partir do GitHub"
-    pipx install "git+$REPO" >/dev/null 2>&1 \
-      || erro "falhou ao instalar. Rode sem o script para ver o motivo: pipx install git+$REPO"
-    ok "designsys instalado"
+    acao="atualizando"
+    flags="--force"
   fi
+
+  passo "$acao o designsys a partir do PyPI"
+  # shellcheck disable=SC2086 # $flags é vazio ou --force, intencionalmente sem aspas
+  if pipx install $flags designsys >/dev/null 2>&1; then
+    ok "designsys ${acao%ndo}do"
+    pipx ensurepath >/dev/null 2>&1 || true
+    return
+  fi
+
+  passo "PyPI não respondeu como esperado — usando o repositório"
+  # shellcheck disable=SC2086
+  pipx install $flags "git+$REPO" >/dev/null 2>&1 \
+    || erro "falhou ao instalar. Rode sem o script para ver o motivo: pipx install designsys"
+  ok "designsys ${acao%ndo}do a partir do repositório"
 
   pipx ensurepath >/dev/null 2>&1 || true
 }

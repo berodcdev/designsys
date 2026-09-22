@@ -108,9 +108,22 @@ class TestBannerDoMenu:
         esperadas = {
             "--login", "--user", "--pass", "--pages", "--path", "--out",
             "--no-assets", "--no-pdf", "--no-dark", "--no-viewports",
-            "--exhaustive", "--headed", "--verbose", "--timeout",
+            "--exhaustive", "--headed", "--insecure", "--verbose", "--timeout",
         }
         assert esperadas <= declaradas, f"faltando: {esperadas - declaradas}"
+
+    def test_url_valida_o_certificado_por_padrao(self):
+        """--insecure existe, é flag, e vem desligada.
+
+        O default aqui é a garantia de que ninguém envia senha por uma conexão
+        que aceita qualquer certificado só por ter esquecido de um argumento.
+        """
+        from typer.main import get_command
+
+        comando = get_command(app).commands["url"]
+        (parametro,) = [p for p in comando.params if "--insecure" in p.opts]
+        assert parametro.is_flag
+        assert parametro.default is False
 
     def test_url_help_renderiza(self):
         """O help sai inteiro, com uso e exemplos."""
@@ -122,6 +135,18 @@ class TestBannerDoMenu:
     def test_versao(self):
         result = runner.invoke(app, ["--version"])
         assert result.exit_code == 0 and "designsys" in result.stdout
+
+    def test_versao_vem_do_pacote_instalado(self):
+        """A versão sai do pyproject, via metadados — não de uma cópia no código.
+
+        O fallback só aparece quando o pacote não está instalado. Vê-lo aqui
+        significa que o empacotamento quebrou, e um release publicaria um
+        `--version` errado.
+        """
+        from designsys import __version__
+
+        assert __version__ != "0+desconhecida"
+        assert __version__[0].isdigit()
 
 
 class TestNormalizeUrl:

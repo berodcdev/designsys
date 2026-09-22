@@ -9,11 +9,12 @@ CSS vars, um `tailwind.config.js` colável, um guia visual navegável e um diagn
 de acessibilidade e consistência.
 
 [![CI](https://github.com/berodcdev/designsys/actions/workflows/ci.yml/badge.svg)](https://github.com/berodcdev/designsys/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/designsys.svg)](https://pypi.org/project/designsys/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
-[![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-green.svg)](LICENSE)
-[![Testes](https://img.shields.io/badge/testes-389-brightgreen.svg)](tests/)
+[![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-green.svg)](https://github.com/berodcdev/designsys/blob/main/LICENSE)
+[![Testes](https://img.shields.io/badge/testes-400-brightgreen.svg)](https://github.com/berodcdev/designsys/blob/main/tests/)
 
-<img src="docs/img/menu.svg" alt="Menu da ferramenta no terminal" width="820">
+<img src="https://raw.githubusercontent.com/berodcdev/designsys/main/docs/img/demo.gif" alt="Terminal: designsys extrai o design system da stripe.com em três páginas, lista os arquivos gerados e roda o diagnóstico de acessibilidade" width="820">
 
 </div>
 
@@ -30,12 +31,12 @@ designsys audit designsys-stripe.com-2026-08-13   # o diagnóstico
 
 <table>
 <tr>
-<td width="50%"><img src="docs/img/pdf-capa.png" alt="Capa do PDF gerado"></td>
-<td width="50%"><img src="docs/img/pdf-resumo.png" alt="Resumo executivo no PDF"></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/berodcdev/designsys/main/docs/img/pdf-capa.png" alt="Capa do PDF gerado"></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/berodcdev/designsys/main/docs/img/pdf-resumo.png" alt="Resumo executivo no PDF"></td>
 </tr>
 <tr>
-<td width="50%"><img src="docs/img/pdf-temas.png" alt="Tema claro e escuro pareados"></td>
-<td width="50%"><img src="docs/img/pdf-diagnostico.png" alt="Diagnóstico de acessibilidade e consistência"></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/berodcdev/designsys/main/docs/img/pdf-temas.png" alt="Tema claro e escuro pareados"></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/berodcdev/designsys/main/docs/img/pdf-diagnostico.png" alt="Diagnóstico de acessibilidade e consistência"></td>
 </tr>
 </table>
 
@@ -56,8 +57,19 @@ Uma pasta por extração:
 
 ## Instalação
 
-Uma linha — confere o Python, instala o pipx se faltar, instala a ferramenta e baixa o
-Chromium:
+```bash
+pipx install designsys
+designsys doctor --fix     # baixa o Chromium do Playwright
+```
+
+São **dois** comandos porque o `pip` não executa nada depois de instalar: o Chromium que
+a ferramenta usa para renderizar as páginas vem do Playwright, e é o `doctor --fix` que o
+baixa. Sem ele, a instalação está completa mas a extração não roda.
+
+### Uma linha só
+
+O instalador confere o Python, instala o pipx se faltar, instala a ferramenta e já baixa
+o Chromium:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/berodcdev/designsys/main/install.sh | bash
@@ -70,12 +82,13 @@ curl -fsSL https://raw.githubusercontent.com/berodcdev/designsys/main/install.sh
 less install.sh && bash install.sh
 ```
 
-### Passo a passo, se preferir
+### Direto do repositório
+
+Para acompanhar o que ainda não saiu em versão:
 
 ```bash
-brew install pipx && pipx ensurepath    # ou: apt install pipx
 pipx install git+https://github.com/berodcdev/designsys.git
-designsys doctor --fix                  # instala o Chromium do Playwright
+designsys doctor --fix
 ```
 
 ### Para desenvolver
@@ -86,12 +99,13 @@ pipx install --editable ./designsys
 designsys doctor --fix
 ```
 
-Python 3.11+. Testado em macOS e Linux. Rodar o instalador de novo **atualiza** a
-ferramenta para a versão mais recente do repositório.
-
-> Ainda não está no PyPI. Quando estiver, `pipx install designsys` basta.
+Python 3.11+. Testado em macOS e Linux. Para atualizar: `pipx upgrade designsys`.
 
 ## Comandos
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/berodcdev/designsys/main/docs/img/menu.svg" alt="Menu da ferramenta no terminal" width="820">
+</div>
 
 | comando | o que faz |
 | --- | --- |
@@ -116,6 +130,7 @@ ferramenta para a versão mais recente do repositório.
 | `--no-viewports` | Não recoleta em mobile/tablet (extração mais rápida). |
 | `--no-assets` · `--no-pdf` | Pula o download de assets · não gera o PDF. |
 | `--headed` | Abre o navegador visível (útil para 2FA e captcha). |
+| `--insecure` | Aceita certificado TLS inválido. Só em ambiente interno de confiança. |
 | `--verbose` | Detalhes e tracebacks. |
 
 ## Login
@@ -142,9 +157,9 @@ Como a sessão persiste, isso acontece **uma vez por domínio**.
 > **Senha nunca é gravada em disco.** O que persiste são os cookies — e um token de sessão
 > vale tanto quanto a senha enquanto não expira. Trate `~/.designsys/profiles/` como
 > material sensível: `rm -rf ~/.designsys/profiles/<domínio>`. Detalhes em
-> [`SECURITY.md`](SECURITY.md).
+> [`SECURITY.md`](https://github.com/berodcdev/designsys/blob/main/SECURITY.md).
 
-Mais a fundo em [`docs/login.md`](docs/login.md).
+Mais a fundo em [`docs/login.md`](https://github.com/berodcdev/designsys/blob/main/docs/login.md).
 
 ## Além dos tokens
 
@@ -196,15 +211,15 @@ avisos, não como palpites.
 
 ## Documentação
 
-- [`docs/arquitetura.md`](docs/arquitetura.md) — como o código está organizado e por quê.
-- [`docs/login.md`](docs/login.md) — as camadas de autenticação em detalhe.
-- [`docs/saidas.md`](docs/saidas.md) — o formato de cada arquivo gerado.
-- [`docs/diagnostico.md`](docs/diagnostico.md) — como as notas são calculadas.
-- [`CHANGELOG.md`](CHANGELOG.md) — histórico de versões.
+- [`docs/arquitetura.md`](https://github.com/berodcdev/designsys/blob/main/docs/arquitetura.md) — como o código está organizado e por quê.
+- [`docs/login.md`](https://github.com/berodcdev/designsys/blob/main/docs/login.md) — as camadas de autenticação em detalhe.
+- [`docs/saidas.md`](https://github.com/berodcdev/designsys/blob/main/docs/saidas.md) — o formato de cada arquivo gerado.
+- [`docs/diagnostico.md`](https://github.com/berodcdev/designsys/blob/main/docs/diagnostico.md) — como as notas são calculadas.
+- [`CHANGELOG.md`](https://github.com/berodcdev/designsys/blob/main/CHANGELOG.md) — histórico de versões.
 
 ## Contribuindo
 
-Contribuições são bem-vindas. O [`CONTRIBUTING.md`](CONTRIBUTING.md) tem o essencial:
+Contribuições são bem-vindas. O [`CONTRIBUTING.md`](https://github.com/berodcdev/designsys/blob/main/CONTRIBUTING.md) tem o essencial:
 como rodar, como testar (`pytest -m "not browser"` para o ciclo rápido) e o que se espera
 de um PR.
 
@@ -225,7 +240,7 @@ estudar — não para clonar a identidade de outra pessoa.
 
 ## Licença
 
-[MIT](LICENSE) — © 2026 Bernardo.
+[MIT](https://github.com/berodcdev/designsys/blob/main/LICENSE) — © 2026 Bernardo.
 
 ---
 

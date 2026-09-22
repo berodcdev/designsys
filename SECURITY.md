@@ -42,6 +42,18 @@ duas vezes antes de versionar ou compartilhar uma pasta gerada a partir de um
 ambiente autenticado — o `.gitignore` deste repositório já ignora
 `designsys-*/` por esse motivo.
 
+## Conexão
+
+O navegador **valida o certificado TLS** de tudo que carrega. Se o site que você
+quer extrair usa certificado próprio ou autoassinado — típico de ambientes de
+homologação internos — a extração falha com uma mensagem explícita, e você pode
+repetir com `--insecure`.
+
+Essa flag desliga a validação para toda a execução: a conexão passa a aceitar
+qualquer certificado, inclusive o de quem estiver no meio do caminho. Use apenas
+em rede e ambiente de confiança, e nunca junto de `--login` numa rede que você
+não controla — é exatamente aí que a senha viaja.
+
 ## Escopo
 
 A ferramenta abre páginas num navegador e lê o CSS delas. Ela não executa código

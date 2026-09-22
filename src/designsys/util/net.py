@@ -26,6 +26,20 @@ _session.headers.update(
 )
 
 
+def set_insecure(enabled: bool) -> None:
+    """Liga ou desliga a validação de certificado TLS nos downloads diretos.
+
+    O navegador e estas requisições precisam concordar: quem usa --insecure está
+    num ambiente de certificado próprio, onde o CSS bloqueado por CORS e os
+    assets vêm justamente do host cujo certificado o navegador já aceitou.
+    """
+    _session.verify = not enabled
+    if enabled:
+        import urllib3
+
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
 def fetch_text(url: str, headers: dict[str, str] | None = None, retries: int = 1) -> str | None:
     """Baixa um recurso textual (CSS). None em qualquer falha."""
     for attempt in range(retries + 1):

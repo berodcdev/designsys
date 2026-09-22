@@ -6,18 +6,27 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   rapidos:
-    name: testes sem navegador (${{ matrix.python }})
-    runs-on: ubuntu-latest
+    name: testes sem navegador (${{ matrix.os }} · ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest]
         python: ["3.11", "3.12", "3.13"]
+        include:
+          # macOS é onde a ferramenta é desenvolvida — uma versão sustenta a
+          # afirmação "testado em macOS e Linux" do README.
+          - os: macos-latest
+            python: "3.13"
     steps:
       - uses: actions/checkout@v4
 

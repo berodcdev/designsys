@@ -501,6 +501,11 @@ def url_command(
         False, "--exhaustive", help="Visita todas as páginas, mesmo sem token novo."
     ),
     headed: bool = typer.Option(False, "--headed", help="Abre o navegador visível."),
+    insecure: bool = typer.Option(
+        False,
+        "--insecure",
+        help="Aceita certificado TLS inválido. Só em ambiente interno de confiança.",
+    ),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Mostra detalhes e tracebacks."),
     timeout: int = typer.Option(30, "--timeout", help="Timeout de navegação em segundos."),
 ) -> None:
@@ -517,6 +522,11 @@ def url_command(
             "  [yellow]![/yellow] senha passada por argumento fica no histórico do shell — "
             "considere usar apenas [cyan]--login[/cyan]."
         )
+    if insecure:
+        console.print(
+            "  [yellow]![/yellow] [bold]--insecure[/bold]: a validação do certificado TLS "
+            "está desligada — a conexão fica sujeita a interceptação."
+        )
 
     console.print()
     console.print(f"[bold cyan]designsys[/bold cyan] [dim]url[/dim] {normalized}")
@@ -532,6 +542,7 @@ def url_command(
         out=out_dir,
         no_assets=no_assets,
         headed=headed,
+        insecure=insecure,
         login=login or bool(user and password),
         username=user,
         password=password,

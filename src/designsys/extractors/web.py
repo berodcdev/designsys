@@ -59,6 +59,7 @@ class WebOptions:
     out: Path | None = None
     no_assets: bool = False
     headed: bool = False
+    insecure: bool = False
     login: bool = False
     username: str | None = None
     password: str | None = None
@@ -111,9 +112,11 @@ class WebExtractor:
 
     # ===================================================================== run
     def run(self) -> DesignSystem:
+        net.set_insecure(self.opt.insecure)
         session = BrowserSession(
             self.domain,
             headed=self.opt.headed,
+            insecure=self.opt.insecure,
             verbose=self.opt.verbose,
             log=self.rep.detail,
             timeout_ms=self.opt.timeout_ms,

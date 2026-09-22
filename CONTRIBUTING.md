@@ -3,6 +3,9 @@
 Obrigado pelo interesse. Este documento diz o mínimo para você conseguir rodar,
 testar e propor mudanças sem perder tempo.
 
+Procurando no que ajudar? [`docs/IDEIAS.md`](docs/IDEIAS.md) lista o que está em
+aberto e por quê.
+
 ## Rodando o projeto
 
 > Só quer **usar** a ferramenta? O instalador resolve:
@@ -88,6 +91,26 @@ Um mapa rápido — os detalhes estão em [`docs/arquitetura.md`](docs/arquitetu
 | o PDF | `src/designsys/output/pdfdoc.py`, `pdfrender.py` |
 | os outros arquivos gerados | `src/designsys/output/` |
 | o menu e os comandos | `src/designsys/cli.py` |
+| o GIF do README | `docs/demo.tape` |
+
+## Regerando o GIF do README
+
+`docs/img/demo.gif` não é editado à mão: quem manda é
+[`docs/demo.tape`](docs/demo.tape), um roteiro do [VHS](https://github.com/charmbracelet/vhs).
+
+```bash
+brew install vhs ffmpeg       # ou o equivalente da sua distro
+bash docs/gerar-demo.sh
+```
+
+O tape roda a extração **de verdade** contra stripe.com — os números do GIF são
+medidos na hora. Por isso a gravação leva alguns minutos: o script grava em MP4,
+acelera 6× com ffmpeg e converte em GIF. Se mexer no fator de aceleração, ajuste
+junto a velocidade de digitação e as pausas do tape, que estão multiplicadas pelo
+mesmo número para compensar.
+
+Regere o GIF só quando a saída do terminal mudar de verdade — ele pesa alguns MB
+e cada versão fica no histórico do repositório.
 
 ## Relatando um problema de extração
 

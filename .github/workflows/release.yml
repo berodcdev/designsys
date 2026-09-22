@@ -1,0 +1,79 @@
+name: Release
+
+# Publica no PyPI quando uma tag v* é empurrada.
+#
+# Não há token de API guardado em lugar nenhum: o PyPI confia neste workflow
+# através de Trusted Publishing (OIDC). Quem autoriza é a configuração do lado
+# do PyPI — repositório, nome do workflow e environment precisam bater.
+#
+#   git tag -a v0.2.0 -m "designsys 0.2.0" && git push origin v0.2.0
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  construir:
+    name: construir e conferir os artefatos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar as ferramentas de empacotamento
+        run: python -m pip install --upgrade build twine
+
+      - name: Construir sdist e wheel
+        run: python -m build
+
+      - name: Conferir os metadados e a renderização do README
+        # O README vira a página do projeto no PyPI: se ele não renderizar, a
+        # publicação é aceita e a página sai quebrada. Melhor falhar aqui.
+        run: python -m twine check --strict dist/*
+
+      - name: A versão da tag bate com a do pyproject?
+        # Evita publicar 0.2.0 com a tag v0.3.0 — erro que não dá para desfazer,
+        # porque o PyPI não aceita reenviar um arquivo já publicado.
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg=$(ls dist/*.tar.gz | sed -E 's/.*designsys-(.*)\.tar\.gz/\1/')
+          if [ "$tag" != "$pkg" ]; then
+            echo "tag v$tag não bate com a versão empacotada ($pkg)" >&2
+            exit 1
+          fi
+          echo "versão conferida: $pkg"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publicar:
+    name: publicar no PyPI
+    needs: construir
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    # O environment é o que o PyPI verifica junto do repositório e do workflow.
+    environment:
+      name: pypi
+      url: https://pypi.org/project/designsys/
+
+    permissions:
+      id-token: write # exigida pelo OIDC do Trusted Publishing
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - uses: pypa/gh-action-pypi-publish@release/v1

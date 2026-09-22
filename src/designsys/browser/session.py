@@ -50,12 +50,14 @@ class BrowserSession:
         domain: str,
         *,
         headed: bool = False,
+        insecure: bool = False,
         verbose: bool = False,
         log: Callable[[str], None] = lambda m: None,
         timeout_ms: int = 30000,
     ) -> None:
         self.domain = domain
         self.headed = headed
+        self.insecure = insecure
         self.verbose = verbose
         self.log = log
         self.timeout_ms = timeout_ms
@@ -93,7 +95,7 @@ class BrowserSession:
                 user_agent=DEFAULT_UA,
                 args=LAUNCH_ARGS,
                 locale="pt-BR",
-                ignore_https_errors=True,
+                ignore_https_errors=self.insecure,
                 accept_downloads=False,
             )
         except Exception as exc:
@@ -290,7 +292,11 @@ def _friendly_nav_error(url: str, exc: Exception | None) -> str:
     if "ERR_CONNECTION_REFUSED" in msg:
         return f"conexão recusada por {url} — o servidor está no ar?"
     if "ERR_CERT" in msg:
-        return f"certificado TLS inválido em {url}."
+        return (
+            f"certificado TLS inválido em {url}.\n"
+            "Se for um ambiente interno de confiança (staging, cert próprio), "
+            "repita com --insecure."
+        )
     if "Timeout" in msg or "timeout" in msg:
         return f"{url} demorou demais para responder (timeout)."
     if "ERR_INTERNET_DISCONNECTED" in msg:

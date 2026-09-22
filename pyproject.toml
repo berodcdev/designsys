@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "designsys"
-version = "0.2.0"
+version = "0.3.0"
 description = "Extrai o design system completo de um site ao vivo — inclusive atrás de login — ou de um repositório local."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -66,6 +66,9 @@ packages = ["src/designsys"]
 
 [tool.hatch.build.targets.sdist]
 include = ["src/designsys", "tests", "docs", "README.md", "LICENSE", "CHANGELOG.md"]
+# As imagens do README são servidas do GitHub e sozinhas pesam mais que todo o
+# resto do pacote — não faz sentido baixá-las a cada instalação.
+exclude = ["docs/img"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

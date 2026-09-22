@@ -24,6 +24,15 @@ design-system.pdf
 tokens.studio.json
 .designsys-print.html
 
+# Vídeo bruto do GIF de demonstração (intermediário; só o .gif é versionado)
+docs/img/demo.mp4
+
+# Segredos (nada aqui gera esses arquivos — é rede de proteção)
+.env
+.env.*
+*.pem
+*.key
+
 # Sistema
 .DS_Store
 Thumbs.db
